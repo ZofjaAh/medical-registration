@@ -20,6 +20,7 @@ It interacts with database(PostgreSQL) using Spring Data JPA and Hibernate.
 The Application contains layers WEB and REST (with authorization DOCTOR/PATIENT or REST_API respectively).
 WEB layer created with using Thymeleaf based on Template Mode: HTML with input validation. 
 REST-service establishes a connection with OpenApi https://api.nfz.gov.pl/app-stat-api-jgp that allows according to a category of the disease determine the method of treatment.
+
 Test's part contains such tests as:
 * DataJpaTests, 
 * WebMvcTest,
