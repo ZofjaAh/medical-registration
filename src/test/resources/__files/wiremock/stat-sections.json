@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "@context": "https://api.nfz.gov.pl/app-stat-api-jgp/schemas/#section",
+    "count": 16,
+    "title": "section",
+    "page": 1,
+    "url": "https://api.nfz.gov.pl/app-stat-api-jgp/schema/section",
+    "limit": 25,
+    "provider": "Narodowy Fundusz Zdrowia",
+    "date-published": null,
+    "date-modified": "2024-04-09T12:21:35+02:00",
+    "description": "Dane słownikowe sekcji JGP.",
+    "keywords": "Narodowy Fundusz Zdrowia,statystyka,statystyka NFZ,ststystyka świadczeń,statystyka JGP",
+    "language": "PL",
+    "content-type": "application/json; charset=utf-8",
+    "is-part-of": "Słowniki",
+    "version": "1.1"
+  },
+  "links": {
+    "first": "http://api.nfz.gov.pl/app-stat-api-jgp/sections?section=Chor&page=1&limit=25&format=json&api-version=1.1",
+    "prev": null,
+    "self": "http://api.nfz.gov.pl/app-stat-api-jgp/sections?section=Chor&page=1&limit=25&format=json&api-version=1.1",
+    "next": null,
+    "last": "http://api.nfz.gov.pl/app-stat-api-jgp/sections?section=Chor&page=1&limit=25&format=json&api-version=1.1",
+    "related": null
+  },
+  "data": [
+    "A - Choroby układu nerwowego",
+    "B - Choroby oczu",
+    "C - Choroby twarzy, jamy ustnej, gardła, krtani, nosa i uszu",
+    "D - Choroby układu oddechowego",
+    "E - Choroby serca",
+    "F - Choroby przewodu pokarmowego",
+    "G - Choroby wątroby, dróg żółciowych, trzustki i śledziony",
+    "H - Choroby układu mięśniowo-szkieletowego",
+    "J - Choroby piersi, skóry i oparzenia",
+    "K - Choroby układu dokrewnego",
+    "L - Choroby układu moczowo-płciowego",
+    "M - Choroby żeńskiego układu rozrodczego",
+    "P - Choroby dziecięce - leczenie zachowawcze",
+    "PZ - Choroby dziecięce - leczenie zabiegowe",
+    "Q - Choroby naczyń",
+    "S - Choroby układu krwiotwórczego, zatrucia i choroby zakaźne"
+  ]
+}

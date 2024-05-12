@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous">
+    <title>Online Medical Appointment</title>
+</head>
+<body>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <a th:href="@{/}" class="btn btn-info" role="button">Go back to the main page</a>
+        </div>
+    </div>
+    <br>
+</div>
+<br>
+<div class="container">
+
+    <h4>Appointment's information for:
+        <b><span th:if="${appointmentInformationDTO.appointmentCode}"
+                 th:text="${appointmentInformationDTO.appointmentCode}"> code</span></b></h4>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Pesel</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Patient's comment</th>
+            <th>Execution</th>
+            <th>MedicalRecord</th>
+            <th>Doctor's comment</th>
+            <th>Diagnosis</th>
+            <th>Mark as past event</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${appointmentInformationDTO.patientName}"></td>
+            <td th:text="${appointmentInformationDTO.patientSurname}"></td>
+            <td th:text="${appointmentInformationDTO.patientPesel}"></td>
+            <td th:text="${appointmentInformationDTO.patientGender}"></td>
+            <td th:text="${appointmentInformationDTO.patientAge}"></td>
+            <td th:text="${appointmentInformationDTO.commentPatient}"></td>
+            <td th:text="${appointmentInformationDTO.execution}"></td>
+            <td th:text="${appointmentInformationDTO.medicalRecordCode}"></td>
+            <td th:text="${appointmentInformationDTO.commentDoctor}"></td>
+            <td th:text="${appointmentInformationDTO.diagnosis}"></td>
+            <td>
+                <form action="#"
+                      th:action="@{/appointment/doctor/change/execution/{appointmentCode}(appointmentCode=${appointmentInformationDTO.appointmentCode})}"
+                     th:method="PATCH">
+                    <button type="submit" class="btn btn-info">Yes</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <h4>Do you want to see a Patient's Health History?</h4>
+    <form action="#" th:action="@{/patient-history/{patientPesel}(patientPesel=${appointmentInformationDTO.patientPesel})}" method="GET" >
+        <div class="row">
+            <div class="col-md-4 offset-md-6">
+                <button type="submit" th:name="appointmentCode" th:value=${appointmentCode}
+                        class="btn btn-info">Find</button>
+            </div>
+        </div>
+    </form>
+    <br>
+    <h4>Do you want to make a medical record?</h4>
+    <br>
+    <form action="#"
+          th:action="@{/appointment/doctor/add/record/{appointmentCode}(appointmentCode=${appointmentInformationDTO.appointmentCode})}"
+          th:object="${medicalRecordDTO}" method="POST">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="commentDoctor">Comment:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <textarea type="text"  id="commentDoctor" th:field="*{commentDoctor}" rows="5" cols="40"
+                                  required="required"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mt-3">
+                    <div class="col-md-2">
+                        <lable for="diagnosis">Diagnosis:</lable>
+                    </div>
+                    <div class="col-md-3">
+                         <textarea type="text"   id="diagnosis" th:field="*{diagnosis}" rows="2" cols="35"
+                                   required="required"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <input type="submit" value="GO!" class="btn btn-success">
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+</div>
+</div>
+</body>
+</html>

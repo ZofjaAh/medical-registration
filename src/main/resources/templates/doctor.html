@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous">
+    <title>Online Medical Appointment</title>
+</head>
+<body>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <a th:href="@{/}" class="btn btn-info" role="button">Go back to the main page</a>
+        </div>
+    </div>
+
+    <br>
+    <h4>There you can start work</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="#" th:action="@{/schedule/show}" th:method="GET">
+                <br>
+                <h6> If You are existing doctor - please Sign in!</h6>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="existingDoctorEmail">Your email:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-1">
+                        <input type="text" id="existingDoctorEmail" th:name="existingDoctorEmail">
+
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <input type="submit" value="Sign in!" class="btn btn-success">
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="col-md-6">
+            <form action="#" th:action="@{/doctor/new}" th:method="POST" th:object="${doctorDTO}">
+                <br>
+                <br>
+                <h6>If You are new doctor - please fill out request form!</h6>
+                <br>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="name">Name:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" id="name" th:field="*{name}">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="surname">Surname:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" id="surname" th:field="*{surname}">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="pesel">Pesel:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" id="pesel" th:field="*{pesel}">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="email">Email:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" placeholder="tomasz_leczniczy@lekaz.pl" id="email" th:field="*{email}">
+                    </div>
+                </div>
+                <br>
+                <h6>Please provide your speciality:</h6>
+                <br>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="specialityCode">Code:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" placeholder="23-456" id="specialityCode" th:field="*{specialityCode}">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="specialityDefinition">Definition:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" placeholder="pediatrics" id="specialityDefinition" th:field="*{specialityDefinition}">
+                    </div>
+                </div>
+                <br>
+                <h6>Please provide your address:</h6>
+                <br>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="addressCountry">Country:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" id="addressCountry" th:field="*{addressCountry}">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="addressCity">City:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" id="addressCity" th:field="*{addressCity}">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="addressPostalCode">Postal code:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" id="addressPostalCode" th:field="*{addressPostalCode}">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <label for="addressStreet">Street:</label>
+                    </div>
+                    <div class="col-md-3 offset-md-2">
+                        <input type="text" id="addressStreet" th:field="*{addressStreet}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <input type="submit" value="Registration!" class="btn btn-success">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+
+    </div>
+
+    </form>
+</div>
+</body>
+</html>

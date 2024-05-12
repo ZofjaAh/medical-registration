@@ -1,0 +1,2750 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.1",
+    "title": "API Statystyki NFZ - Świadczenia 1.1"
+  },
+  "basePath": "/app-stat-api-jgp",
+  "paths": {
+    "/index-of-tables": {
+      "get": {
+        "tags": [
+          ""
+        ],
+        "summary": "",
+        "description": "Zasób zwrca listę dostępnych tabel statystycznych zgodnie z wybranymi parametrami wyszukiwania. Dane statystyczne\r\n            z wybranej tabli należy pobrać poprzez odpowiadającą jej metodę przy użyciu identyfikatora.",
+        "operationId": "IndeksTabel",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "catalog",
+            "in": "query",
+            "description": "Katalog świadczeń.\r\n            1a - Jednorodne Grupy Pacjentów\r\n            1b - Katalog świadczeń odrębnych\r\n            1c - Katalog świadczeń do sumowania\r\n            1d - Katalog świadczeń radioterapii\r\n            1w - Katalog świadczeń wysokospecjalistycznych",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nazwa świadczenia lub grupy JGP dla których mają zostać zwrócone table statystyczne. Nazwa musi być zgodna z nazwami ze słownika - zasób /benefits",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Rok dla którego mają zostać zwrócone tabele statystyczne",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista tabel statystycznycjh określona parametrami wyszukiwania",
+            "schema": {
+              "$ref": "#/definitions/index-of-tables-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/basic-data/{id}": {
+      "get": {
+        "tags": [
+          "Dane podstawowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca podstawowe dane statystyczne dotyczące hospitalizacji. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table.",
+        "operationId": "DanePodstawowe",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/basic-data-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/hospitalizations-by-patient-gender/{id}": {
+      "get": {
+        "tags": [
+          "Dane podstawowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w podziale na płeć pacjenta. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "CzasHospitalizacjiWgPlci",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/hospitalizations-by-patient-gender-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/hospitalizations-by-admission-type/{id}": {
+      "get": {
+        "tags": [
+          "Dane podstawowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w podziale na tryb przyjęcia pacjenta. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "LiczbaCzasHospitalizacjiWgTrybuPrzyjecia",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/hospitalizations-by-admission-type-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/hospitalizations-by-admission-type-nfz-categorized/{id}": {
+      "get": {
+        "tags": [
+          "Dane podstawowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w podziale na tryb przyjęcia pacjenta - kategoryzacja według NFZ. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "LiczbaCzasHospitalizacjiWgTrybuPrzyjeciaNfz",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/hospitalizations-by-admission-type-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/hospitalizations-by-discharge-type/{id}": {
+      "get": {
+        "tags": [
+          "Dane podstawowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w podziale na tryb wypisu pacjenta.",
+        "operationId": "LiczbaCzasHospitalizacjiWgTrybuWypisu",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/hospitalizations-by-discharge-type-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/hospitalizations-by-patient-age/{id}": {
+      "get": {
+        "tags": [
+          "Dane podstawowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w podziale na wiek pacjenta. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "LiczbaCzasHospitalizacjiWgGrupyWiekowej",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/hospitalizations-by-patient-age-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/hospitalizations-by-healthcare-service/{id}": {
+      "get": {
+        "tags": [
+          "Dane rozliczeniowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w podziale na zakres świadczeń. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "LiczbaCzasHospitalizacjiWgZakresuSwiadczen",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/hospitalizations-by-healthcare-services-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/hospitalizations-by-product-category/{id}": {
+      "get": {
+        "tags": [
+          "Dane rozliczeniowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w podziale na kategorie produktów sumowanych do JGP. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "LiczbaCzasHospitalizacjiWgKategoryzacjiNfz",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/products-categories-nfz-categorized-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/histogram-data/{id}": {
+      "get": {
+        "tags": [
+          "Dane podstawowe"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane do histogramu czasu pobytu. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "GenerateHistogram",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według Oddziałów Wojewódzkich NFZ",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hospitalType",
+            "in": "query",
+            "description": "Znacznik określający czy dane mają zostać podzielone według rodzajów szpitali\r\nRodzaje szpitali:\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "product",
+            "in": "query",
+            "description": "Nazwa produktu?",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/histogram-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/icd9-procedures/{id}": {
+      "get": {
+        "tags": [
+          "Dane medyczne"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w rozbiciu procedury ICD9. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "ProceduryIcd",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/icd-procedures-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/icd10-diseases/{id}": {
+      "get": {
+        "tags": [
+          "Dane medyczne"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane statystyczne dotyczące hospitalizacji w rozbiciu rozpoznania ICD10. W celu uzyskania identyfikatora należy najpierw wywołać zasób index-of-table",
+        "operationId": "RozpoznaniaIcd",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator tabeli zwrócony z metody index-of-tables.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane statystyczne dla podanego identyfikatora",
+            "schema": {
+              "$ref": "#/definitions/icd-diseases-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/benefits": {
+      "get": {
+        "tags": [
+          "Słowniki"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane słownikowe świadczeń w oparciu o przekazane parametry.",
+        "operationId": "SwiadczeniaJgp",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "benefit",
+            "in": "query",
+            "description": "Nazwa świadczenia.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "section",
+            "in": "query",
+            "description": "Sekcja JGP. Nazwa musi być zgodna z nazwami ze słownika - zasób /sections",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "catalog",
+            "in": "query",
+            "description": "Katalog świadczeń.\r\n            1a - Jednorodne Grupy Pacjentów\r\n            1b - Katalog świadczeń odrębnych\r\n            1c - Katalog świadczeń do sumowania\r\n            1d - Katalog świadczeń radioterapii\r\n            1w - Katalog świadczeń wysokospecjalistycznych",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/benefits-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/sections": {
+      "get": {
+        "tags": [
+          "Słowniki"
+        ],
+        "summary": "",
+        "description": "Zasób zwraca dane słownikowe sekcji JGP w oparciu o przekazane parametry.",
+        "operationId": "SekcjeSwiadczenJgp",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "section",
+            "in": "query",
+            "description": "Nazwa sekcji JGP",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Określa aktualnie wyświetlaną stronę.",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Określa liczbę pozycji wyświetlanych na stronie (maks. 25)",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Określa format odpowiedzi.\r\n            json — JavaScript object notation\r\n            xml — Extensible markup language",
+            "required": false,
+            "type": "string",
+            "default": "json"
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "description": "The requested API version",
+            "required": false,
+            "type": "string",
+            "default": "1.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/sections-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors-response"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "index-of-tables-response": {
+      "description": "Odpowiedź na żądanie indeksu tabel statystycznych",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/base-metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "data": {
+          "$ref": "#/definitions/index-of-tables",
+          "description": "Szczegóły indeksu tabel statystycznych"
+        }
+      }
+    },
+    "base-metadata": {
+      "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/",
+      "type": "object",
+      "properties": {
+        "@context": {
+          "description": "Link do kontekstu wyjaśniającego model",
+          "type": "string"
+        },
+        "title": {
+          "description": "Tytuł",
+          "type": "string"
+        },
+        "url": {
+          "description": "Url zasobu",
+          "type": "string"
+        },
+        "provider": {
+          "description": "Dostawca",
+          "type": "string"
+        },
+        "date-published": {
+          "description": "Data publikacji zasobu",
+          "type": "string"
+        },
+        "date-modified": {
+          "description": "Data modyfikacji zasobu",
+          "type": "string"
+        },
+        "description": {
+          "description": "Opis",
+          "type": "string"
+        },
+        "keywords": {
+          "description": "Słowa kluczowe",
+          "type": "string"
+        },
+        "language": {
+          "description": "Język",
+          "type": "string"
+        },
+        "content-type": {
+          "description": "MIME",
+          "type": "string"
+        },
+        "is-part-of": {
+          "description": "Określa przynależność do grupy",
+          "type": "string"
+        },
+        "version": {
+          "description": "Wskazuję wersję API",
+          "type": "string"
+        }
+      }
+    },
+    "index-of-tables": {
+      "description": "Obiekt reprezentujący indeks (listę) wszystkich dostępnych tabel statystycznych\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/index-of-tables",
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/index-attributes",
+          "description": "Lista atrybutów ineksu tabel statystycznych"
+        }
+      }
+    },
+    "index-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty indeksu tabel statystycznych\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/index-attributes",
+      "type": "object",
+      "properties": {
+        "product-code": {
+          "description": "Kod produktu",
+          "type": "string"
+        },
+        "product-name": {
+          "description": "Nazwa produktu",
+          "type": "string"
+        },
+        "comment": {
+          "description": "Komentarz",
+          "type": "string"
+        },
+        "years": {
+          "description": "Agregat tabel statystycznych dla konkretnego roku",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/index-year"
+          }
+        }
+      }
+    },
+    "index-year": {
+      "description": "Agregat tabel statystycznych dla konkretnego roku\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/index-year",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok zebranych danych statystycznych",
+          "type": "integer"
+        },
+        "tables": {
+          "description": "Lista dostępnych tabel statystycznych za cały rok",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/table"
+          }
+        },
+        "periods": {
+          "description": "Okresy niepełnego roku dla którego występują tabele statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/period"
+          }
+        }
+      }
+    },
+    "table": {
+      "description": "Tabela statystyczna",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator. Potrzebny w celu wyświetlenia tabeli poprzez wywołanie odpowiedniej metody",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/table-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        },
+        "links": {
+          "$ref": "#/definitions/baseLinks",
+          "description": "Linki do zasobów"
+        }
+      }
+    },
+    "period": {
+      "description": "Okres dla którego dostępne są tabele statystyczne\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/period",
+      "type": "object",
+      "properties": {
+        "date-from": {
+          "format": "date-time",
+          "description": "Data początku okresu",
+          "type": "string"
+        },
+        "date-to": {
+          "format": "date-time",
+          "description": "Data końca okresu",
+          "type": "string"
+        },
+        "tables": {
+          "description": "Lista dostępnych tabel statystycznych w okresie",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/table"
+          }
+        }
+      }
+    },
+    "table-attributes": {
+      "description": "Szczegóły przedstawiające atrybuty tabeli statystycznej",
+      "type": "object",
+      "properties": {
+        "header": {
+          "description": "Tytuł tabeli",
+          "type": "string"
+        },
+        "resource-name": {
+          "description": "Nazwa zasobu zawierającego szczegóły",
+          "type": "string"
+        },
+        "additional-infromation": {
+          "$ref": "#/definitions/additional-information",
+          "description": "Dodatkowe informacje"
+        }
+      }
+    },
+    "baseLinks": {
+      "description": "Podstawowe linki nawigujące",
+      "type": "object",
+      "properties": {
+        "related": {
+          "description": "Link do zasobu powiązanego",
+          "type": "string"
+        }
+      }
+    },
+    "additional-information": {
+      "description": "Dodatkowe informacje na temat tabeli statystycznej",
+      "type": "object",
+      "properties": {
+        "divided-by-branches": {
+          "description": "Znacznik określający czy tabela jest podzilona na Oddziały Wojewódzkie NFZ",
+          "type": "boolean"
+        },
+        "divided-by-hospital-types": {
+          "description": "Znacznik określający czy tabela jest podzilona na typy szpitali",
+          "type": "boolean"
+        },
+        "divided-by-products": {
+          "description": "Znacznik określający czy tabela jest podzilona na rodzaj produktu",
+          "type": "boolean"
+        }
+      }
+    },
+    "errors-response": {
+      "description": "Model returning list of errors",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "description": "Errors list",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/error"
+          }
+        }
+      }
+    },
+    "error": {
+      "description": "Error details",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unique identifier",
+          "type": "string"
+        },
+        "error-result": {
+          "description": "Result of request",
+          "type": "string"
+        },
+        "error-reason": {
+          "description": "Error reason",
+          "type": "string"
+        },
+        "error-solution": {
+          "description": "Solution for error",
+          "type": "string"
+        },
+        "error-help": {
+          "description": "Linkt to error details",
+          "type": "string"
+        },
+        "error-code": {
+          "format": "int32",
+          "description": "Error code",
+          "type": "integer"
+        }
+      }
+    },
+    "basic-data-response": {
+      "description": "Odpowiedź na żadanie tabeli statystycznej dotyczącej podstawowych danych o hospitalizacji",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/basic-data",
+          "description": "Tabela statystyczna dotycząca podstawowych danych o hospitalizacji"
+        }
+      }
+    },
+    "metadata": {
+      "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/",
+      "type": "object",
+      "properties": {
+        "@context": {
+          "description": "Link do kontekstu wyjaśniającego model",
+          "type": "string"
+        },
+        "count": {
+          "format": "int32",
+          "description": "Liczba znalezionych pozycji",
+          "type": "integer"
+        },
+        "title": {
+          "description": "Tytuł",
+          "type": "string"
+        },
+        "page": {
+          "format": "int32",
+          "description": "Aktualnie przeglądana strona",
+          "type": "integer"
+        },
+        "url": {
+          "description": "Url zasobu",
+          "type": "string"
+        },
+        "limit": {
+          "format": "int32",
+          "description": "Liczba pozycji na stronę",
+          "type": "integer"
+        },
+        "provider": {
+          "description": "Dostawca",
+          "type": "string"
+        },
+        "date-published": {
+          "description": "Data publikacji zasobu",
+          "type": "string"
+        },
+        "date-modified": {
+          "description": "Data modyfikacji zasobu",
+          "type": "string"
+        },
+        "description": {
+          "description": "Opis",
+          "type": "string"
+        },
+        "keywords": {
+          "description": "Słowa kluczowe",
+          "type": "string"
+        },
+        "language": {
+          "description": "Język",
+          "type": "string"
+        },
+        "content-type": {
+          "description": "MIME",
+          "type": "string"
+        },
+        "is-part-of": {
+          "description": "Określa przynależność do grupy",
+          "type": "string"
+        },
+        "version": {
+          "description": "Wskazuję wersję API",
+          "type": "string"
+        }
+      }
+    },
+    "links": {
+      "description": "Linki nawigujące HATEOS\r\nWięcej informacji: https://api.nfz.gov.pl/{{URL}}/metadata/#links",
+      "type": "object",
+      "properties": {
+        "first": {
+          "description": "Link do pierwszej strony ze znalezionymi pozycjami",
+          "type": "string"
+        },
+        "prev": {
+          "description": "Link do poprzedniej strony ze znalezionymi pozycjami",
+          "type": "string"
+        },
+        "self": {
+          "description": "Link aktualnej strony ze znalezionymi pozycjami",
+          "type": "string"
+        },
+        "next": {
+          "description": "Link do następnej strony ze znalezionymi pozycjami",
+          "type": "string"
+        },
+        "last": {
+          "description": "Link do ostatniej strony ze znalezionymi pozycjami",
+          "type": "string"
+        },
+        "related": {
+          "description": "Link do zasobu powiązanego",
+          "type": "string"
+        }
+      }
+    },
+    "basic-data": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą podstawowych danych o hospitalizacji\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/basic-data",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/basic-data-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "basic-data-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/basic-data-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Podstawowe dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/basic-data-values"
+          }
+        }
+      }
+    },
+    "basic-data-values": {
+      "description": "Szczegóły tabeli statystycznej danych podstawowych",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01 – Dolnośląski\r\n02 – Kujawsko-Pomorski\r\n03 – Lubelski\r\n04 – Lubuski\r\n05 - Łódzki\r\n06 – Małopolski\r\n07 – Mazowiecki\r\n08 – Opolski\r\n09 – Podkarpacki\r\n10 – Podlaski\r\n11 – Pomorski\r\n12 – Śląski\r\n13 – Świętokrzyski\r\n14 – Warmińsko-mazurski\r\n15 – Wielkopolski\r\n16 – Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1 - gminny, powiatowy, miejski \r\n2 - niepubliczny\r\n3 - kliniczny\r\n4 - wojewódzki\r\n5 - inny",
+          "type": "string"
+        },
+        "number-of-patients": {
+          "format": "int32",
+          "description": "Liczba pacjentów",
+          "type": "integer"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "ratio-of-rehospitalizations": {
+          "format": "double",
+          "description": "Współczynnik rehospitalizacji",
+          "type": "number"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "percentage-of-sections": {
+          "format": "double",
+          "description": "Udział hospitalizacji w sekcji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        },
+        "duration-of-hospitalization-mode": {
+          "format": "int32",
+          "description": "Dominanta czasu pobytu",
+          "type": "integer"
+        },
+        "average-value-of-hospitalization": {
+          "format": "double",
+          "description": "Średnia wartość hospitalizacji (zł)",
+          "type": "number"
+        },
+        "average-value-of-hospitalization-points": {
+          "format": "double",
+          "description": "Średnia wartość jednostek hospitalizacji (pkt)",
+          "type": "number"
+        },
+        "average-value-of-drg": {
+          "format": "double",
+          "description": "Średnia wartość grupy (zł)",
+          "type": "number"
+        },
+        "average-value-of-drg-points": {
+          "format": "double",
+          "description": "Średnia wartość jednostek grupy (pkt)",
+          "type": "number"
+        }
+      }
+    },
+    "hospitalizations-by-patient-gender-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej hospitalizacji w podziale na płeć pacjenta",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/gender",
+          "description": "Tabela statystyczna dotycząca hospitalizacji w podziale na płeć pacjenta"
+        }
+      }
+    },
+    "gender": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą hospitalizacji w podziale na płeć pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/gender",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/gender-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "gender-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/gender-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hospitalization-by-patient-gender"
+          }
+        }
+      }
+    },
+    "hospitalization-by-patient-gender": {
+      "description": "Dane statystyczne dotyczące hospitalizacji w podziale na płeć pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/hospitalization-by-patient-gender",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01: Dolnośląski\r\n02: Kujawsko-Pomorski\r\n03: Lubelski\r\n04: Lubuski\r\n05 - Łódzki\r\n06: Małopolski\r\n07: Mazowiecki\r\n08: Opolski\r\n09: Podkarpacki\r\n10: Podlaski\r\n11: Pomorski\r\n12: Śląski\r\n13: Świętokrzyski\r\n14: Warmińsko-mazurski\r\n15: Wielkopolski\r\n16: Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1: gminny, powiatowy, miejski \r\n2: niepubliczny\r\n3: kliniczny\r\n4: wojewódzki\r\n5: inny",
+          "type": "string"
+        },
+        "gender-code": {
+          "format": "int32",
+          "description": "Kod płci\r\n0 płeć nieokreślona\r\n1: mężczyzna\r\n2: kobieta\r\n9: nieznana",
+          "type": "integer"
+        },
+        "gender-name": {
+          "description": "Nazwa płci",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        }
+      }
+    },
+    "hospitalizations-by-admission-type-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej hospitalizacji w podziale na tryb przyjęcia pacjenta",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/admission-type",
+          "description": "Tabela statystyczna dotycząca hospitalizacji w podziale na tryb przyjęcia pacjenta"
+        }
+      }
+    },
+    "admission-type": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą hospitalizacji w podziale na tryb przyjęcia pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/admission",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/admission-type-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "admission-type-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/admission-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hospitalization-by-patient-admission-type"
+          }
+        }
+      }
+    },
+    "hospitalization-by-patient-admission-type": {
+      "description": "Dane statystyczne dotyczące hospitalizacji dla trybu przyjęcia pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/hospitalization-by-patient-age",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01: Dolnośląski\r\n02: Kujawsko-Pomorski\r\n03: Lubelski\r\n04: Lubuski\r\n05 - Łódzki\r\n06: Małopolski\r\n07: Mazowiecki\r\n08: Opolski\r\n09: Podkarpacki\r\n10: Podlaski\r\n11: Pomorski\r\n12: Śląski\r\n13: Świętokrzyski\r\n14: Warmińsko-mazurski\r\n15: Wielkopolski\r\n16: Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1: gminny, powiatowy, miejski \r\n2: niepubliczny\r\n3: kliniczny\r\n4: wojewódzki\r\n5: inny",
+          "type": "string"
+        },
+        "type-of-admission-code": {
+          "format": "int32",
+          "description": "Kod trybu przyjęcia pacjenta",
+          "type": "integer"
+        },
+        "type-of-admission-name": {
+          "description": "Nazwa trybu przyjęcia pacjenta",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        }
+      }
+    },
+    "hospitalizations-by-discharge-type-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej hospitalizacji w podziale na tryb wypisu pacjenta",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/discharge-type",
+          "description": "Tabela statystyczna dotycząca hospitalizacji w podziale na tryb wypisu pacjenta"
+        }
+      }
+    },
+    "discharge-type": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą hospitalizacji w podziale na tryb wypisu pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/discharge",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/discharge-type-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "discharge-type-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/discharge-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hospitalization-by-discharge-type"
+          }
+        }
+      }
+    },
+    "hospitalization-by-discharge-type": {
+      "description": "Dane statystyczne dotyczące hospitalizacji dla na trybu wypisu pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/hospitalization-by-patient-age",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01: Dolnośląski\r\n02: Kujawsko-Pomorski\r\n03: Lubelski\r\n04: Lubuski\r\n05 - Łódzki\r\n06: Małopolski\r\n07: Mazowiecki\r\n08: Opolski\r\n09: Podkarpacki\r\n10: Podlaski\r\n11: Pomorski\r\n12: Śląski\r\n13: Świętokrzyski\r\n14: Warmińsko-mazurski\r\n15: Wielkopolski\r\n16: Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1: gminny, powiatowy, miejski \r\n2: niepubliczny\r\n3: kliniczny\r\n4: wojewódzki\r\n5: inny",
+          "type": "string"
+        },
+        "type-of-discharge-code": {
+          "format": "int32",
+          "description": "Kod trybu wypisu",
+          "type": "integer"
+        },
+        "type-of-discharge-name": {
+          "description": "Nazwa trybu wypisu",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        }
+      }
+    },
+    "hospitalizations-by-patient-age-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej hospitalizacji w podziale na wiek pacjenta",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/age",
+          "description": "Tabela statystyczna dotycząca hospitalizacji w podziale na wiek pacjenta"
+        }
+      }
+    },
+    "age": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą hospitalizacji w podziale na wiek pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/age",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/age-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "age-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/age-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hospitalization-by-patient-age"
+          }
+        }
+      }
+    },
+    "hospitalization-by-patient-age": {
+      "description": "Dane statystyczne dotyczące hospitalizacji dla grupy wiekowe pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/hospitalization-by-patient-age",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01: Dolnośląski\r\n02: Kujawsko-Pomorski\r\n03: Lubelski\r\n04: Lubuski\r\n05 - Łódzki\r\n06: Małopolski\r\n07: Mazowiecki\r\n08: Opolski\r\n09: Podkarpacki\r\n10: Podlaski\r\n11: Pomorski\r\n12: Śląski\r\n13: Świętokrzyski\r\n14: Warmińsko-mazurski\r\n15: Wielkopolski\r\n16: Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1: gminny, powiatowy, miejski \r\n2: niepubliczny\r\n3: kliniczny\r\n4: wojewódzki\r\n5: inny",
+          "type": "string"
+        },
+        "age-group-code": {
+          "format": "int32",
+          "description": "Kod grupy wiekowej\r\n1: poniżej 1\r\n2: 1 - 6\r\n3: 7 - 17\r\n4: 18 - 40\r\n5: 41 - 60\r\n6: 61 - 80\r\n7: 81 i więcej\r\n8: brak danych",
+          "type": "integer"
+        },
+        "age-group-name": {
+          "description": "Nazwa grupy wiekowej",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        }
+      }
+    },
+    "hospitalizations-by-healthcare-services-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej hospitalizacji w podziale na zakres świadczeń",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/contract-product",
+          "description": "Tabela statystyczna dotycząca hospitalizacji w podziale na zakres świadczeń"
+        }
+      }
+    },
+    "contract-product": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą hospitalizacji w podziale na zakres świadczeń\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/contract-product",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/contract-product-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "contract-product-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/contract-product-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hospitalization-by-healthcare-services"
+          }
+        }
+      }
+    },
+    "hospitalization-by-healthcare-services": {
+      "description": "Dane statystyczne dotyczące hospitalizacji dla zakresu świadczeń\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/hospitalization-by-healthcare-service",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01: Dolnośląski\r\n02: Kujawsko-Pomorski\r\n03: Lubelski\r\n04: Lubuski\r\n05 - Łódzki\r\n06: Małopolski\r\n07: Mazowiecki\r\n08: Opolski\r\n09: Podkarpacki\r\n10: Podlaski\r\n11: Pomorski\r\n12: Śląski\r\n13: Świętokrzyski\r\n14: Warmińsko-mazurski\r\n15: Wielkopolski\r\n16: Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1: gminny, powiatowy, miejski \r\n2: niepubliczny\r\n3: kliniczny\r\n4: wojewódzki\r\n5: inny",
+          "type": "string"
+        },
+        "contract-product-code": {
+          "format": "int32",
+          "description": "Kod zakresu świadczeń",
+          "type": "integer"
+        },
+        "contract-product-name": {
+          "description": "Nazwa zakresu świadczeń",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        }
+      }
+    },
+    "products-categories-nfz-categorized-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej hospitalizacji w podziale na kategorie produktów według NFZ",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/product-category",
+          "description": "Tabela statystyczna dotycząca hospitalizacji w podziale na kategorie produktów według NFZ"
+        }
+      }
+    },
+    "product-category": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą hospitalizacji w podziale na płeć pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/product-category",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/product-category-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "product-category-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/product-category-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/product-category-nfz-categorized"
+          }
+        }
+      }
+    },
+    "product-category-nfz-categorized": {
+      "description": "Dane statystyczne dotyczące hospitalizacji dla kategori produktów sumowanych do JGP\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/hospitalization-by-product-category",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01: Dolnośląski\r\n02: Kujawsko-Pomorski\r\n03: Lubelski\r\n04: Lubuski\r\n05 - Łódzki\r\n06: Małopolski\r\n07: Mazowiecki\r\n08: Opolski\r\n09: Podkarpacki\r\n10: Podlaski\r\n11: Pomorski\r\n12: Śląski\r\n13: Świętokrzyski\r\n14: Warmińsko-mazurski\r\n15: Wielkopolski\r\n16: Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1: gminny, powiatowy, miejski \r\n2: niepubliczny\r\n3: kliniczny\r\n4: wojewódzki\r\n5: inny",
+          "type": "string"
+        },
+        "product-category-code": {
+          "format": "int32",
+          "description": "Kod kategorii produktu",
+          "type": "integer"
+        },
+        "product-category-name": {
+          "description": "Nazwa kategorii produktu",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        },
+        "value": {
+          "format": "double",
+          "description": "Wartość",
+          "type": "number"
+        },
+        "value-percentage": {
+          "format": "double",
+          "description": "Udział (%) w wartościach produktów",
+          "type": "number"
+        }
+      }
+    },
+    "histogram-response": {
+      "description": "Odpowiedź na żądanie zasobu histogramu czasu pobytu",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/base-metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "data": {
+          "$ref": "#/definitions/histogram",
+          "description": "Histogram czasu pobytu"
+        }
+      }
+    },
+    "histogram": {
+      "description": "Obiekt reprezentujący histogram czasu pobytu\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/histogram",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/histogram-attributes",
+          "description": "Lista atrybutów histogramu"
+        }
+      }
+    },
+    "histogram-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty histogramu\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/histogram-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod grupy",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa grupy",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane histogramu",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/histogram-values"
+          }
+        }
+      }
+    },
+    "histogram-values": {
+      "description": "Dane statystyczne dotyczące hospitalizacji dla trybu przyjęcia pacjenta\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/hospitalization-by-patient-age",
+      "type": "object",
+      "properties": {
+        "branch": {
+          "description": "Oddział wojewódzki - występuje tylko jeśli dane są rozbite na OW\r\n01: Dolnośląski\r\n02: Kujawsko-Pomorski\r\n03: Lubelski\r\n04: Lubuski\r\n05 - Łódzki\r\n06: Małopolski\r\n07: Mazowiecki\r\n08: Opolski\r\n09: Podkarpacki\r\n10: Podlaski\r\n11: Pomorski\r\n12: Śląski\r\n13: Świętokrzyski\r\n14: Warmińsko-mazurski\r\n15: Wielkopolski\r\n16: Zachodniopomorski",
+          "type": "string"
+        },
+        "hospital-types": {
+          "description": "Typ szpitala - występuje tylko jeśli dane są rozbite na OW\r\n1: gminny, powiatowy, miejski \r\n2: niepubliczny\r\n3: kliniczny\r\n4: wojewódzki\r\n5: inny",
+          "type": "string"
+        },
+        "contract-product-code": {
+          "description": "?",
+          "type": "string"
+        },
+        "contract-product-name": {
+          "description": "Kod produktu",
+          "type": "string"
+        },
+        "points": {
+          "description": "Punkty na hisotgramie",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/histogram-point"
+          }
+        }
+      }
+    },
+    "histogram-point": {
+      "description": "Obiekt reprezentujący punkty na histogramie",
+      "type": "object",
+      "properties": {
+        "x": {
+          "format": "int32",
+          "description": "x - czas pobytu",
+          "type": "integer"
+        },
+        "y": {
+          "format": "int32",
+          "description": "y - ilość hospitalizacji",
+          "type": "integer"
+        }
+      }
+    },
+    "icd-procedures-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej procedur ICD",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/icd-procedure",
+          "description": "Tabela statystyczna procedur ICD"
+        }
+      }
+    },
+    "icd-procedure": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą procedur ICD\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/icd-procedure",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/icd-procedure-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "icd-procedure-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/icd-procedure-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/procedure"
+          }
+        }
+      }
+    },
+    "procedure": {
+      "description": "Dane statystyczne dotyczące procedury ICD\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/icd-procedure",
+      "type": "object",
+      "properties": {
+        "procedure-code": {
+          "description": "Kod procedury",
+          "type": "string"
+        },
+        "procedure-name": {
+          "description": "Nazwa procedury",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        }
+      }
+    },
+    "icd-diseases-response": {
+      "description": "Odpowiedź na żądanie tabeli statystycznej dotyczącej rozpoznań ICD",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "$ref": "#/definitions/icd-disease",
+          "description": "Tabela statystyczna rozpoznań ICD"
+        }
+      }
+    },
+    "icd-disease": {
+      "description": "Obiekt reprezentujący tabele statystyczną dotyczącą rozpoznań ICD\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/icd-disease",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator tabeli statystycznej",
+          "type": "string"
+        },
+        "type": {
+          "description": "Typ obiektu",
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/icd-disease-attributes",
+          "description": "Lista atrybutów tabeli statystycznej"
+        }
+      }
+    },
+    "icd-disease-attributes": {
+      "description": "Szczegóły przedstawiające atrybuyty tabeli statystycznej\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/icd-disease-attributes",
+      "type": "object",
+      "properties": {
+        "year": {
+          "format": "int32",
+          "description": "Rok którego dotyczą dane",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        },
+        "header": {
+          "description": "Tytuł tabeli statystycznej",
+          "type": "string"
+        },
+        "data": {
+          "description": "Dane statystyczne",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/disease"
+          }
+        }
+      }
+    },
+    "disease": {
+      "description": "Dane statystyczne dotyczące rozpoznania ICD\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/icd-disease",
+      "type": "object",
+      "properties": {
+        "disease-code": {
+          "description": "Kod rozpoznania",
+          "type": "string"
+        },
+        "disease-name": {
+          "description": "Nazwa rozpoznania",
+          "type": "string"
+        },
+        "number-of-hospitalizations": {
+          "format": "int32",
+          "description": "Liczba hospitalizacji",
+          "type": "integer"
+        },
+        "percentage": {
+          "format": "double",
+          "description": "Udział hospitalizacji (%)",
+          "type": "number"
+        },
+        "duration-of-hospitalization-mediana": {
+          "format": "int32",
+          "description": "Mediana czasu pobytu",
+          "type": "integer"
+        }
+      }
+    },
+    "benefits-response": {
+      "description": "Odpowiedź na żądanie zasobu słownikowego świadczeń",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "description": "Lista świadczeń",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/benefit"
+          }
+        }
+      }
+    },
+    "benefit": {
+      "description": "Szczegóły świadczenia zwracanego ze słownika\r\nSchema: https://api.nfz.gov.pl/app-stat-api-jgp/schema/benefit",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Kod świadczenia",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nazwa świadczenia",
+          "type": "string"
+        }
+      }
+    },
+    "sections-response": {
+      "description": "Odpowiedź na żądanie zasobu słownikowego sekcji JGP",
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/metadata",
+          "description": "Metadane\r\nWięcej informacji: https://api.nfz.gov.pl/{{path}}/metadata/"
+        },
+        "links": {
+          "$ref": "#/definitions/links",
+          "description": "Linki HATEOS"
+        },
+        "data": {
+          "description": "Lista sekcji JGP",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

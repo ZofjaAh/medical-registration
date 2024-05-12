@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS  credentials CASCADE;
+DROP TABLE IF EXISTS  medical_record CASCADE;
+DROP TABLE IF EXISTS  appointment CASCADE;
+DROP TABLE IF EXISTS  schedule CASCADE;
+DROP TABLE IF EXISTS  patient CASCADE;
+DROP TABLE IF EXISTS  doctor CASCADE;
+DROP TABLE IF EXISTS  speciality CASCADE;
+DROP TABLE IF EXISTS  address CASCADE;
+DROP TABLE IF EXISTS  medical_registration_user_role CASCADE;
+DROP TABLE IF EXISTS  medical_registration_role CASCADE;
+DROP TABLE IF EXISTS  medical_registration_user CASCADE;
+DROP TABLE IF EXISTS  flyway_schema_history CASCADE;
+

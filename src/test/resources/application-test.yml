@@ -1,0 +1,10 @@
+api:
+  stat:
+    url: http://localhost:9999
+spring:
+  flyway:
+    clean-disabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false

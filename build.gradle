@@ -1,0 +1,100 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version "${springBootVersion}"
+	id 'io.spring.dependency-management' version "${springBootDependencyManagementVersion}"
+	id "org.openapi.generator" version "${openapiGeneratorVersion}"
+}
+
+group = 'moj.project'
+version = '1.0'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	//db
+	implementation 'org.flywaydb:flyway-core'
+	runtimeOnly 'org.postgresql:postgresql'
+	//security
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	//annotations
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	//api
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocOpenApiVersion}"
+	//klient
+	implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
+	implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+	implementation "io.swagger:swagger-annotations:${swaggerAnnotationsVersion}"
+	//warning: unknown enum constant When.MAYBE
+	implementation "com.google.code.findbugs:jsr305:${jsr305Version}"
+
+	//test
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
+	//integration tests
+	testImplementation "org.slf4j:slf4j-api:${wiremockSlf4jVersion}"
+	testImplementation "com.github.tomakehurst:wiremock-standalone:${wiremockVersion}"
+	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+}
+openApiGenerate {
+	generatorName = "java"
+	library = "webclient"
+	configOptions = [
+			serializableModel : "true",
+			dateLibrary : "java8",
+			serializationLibrary : "jackson"
+	]
+	outputDir =project.layout.buildDirectory.dir("generated-sources/openapi").get().asFile.path
+	inputSpec = "$rootDir/src/main/resources/contracts/stat.1.1.json".toString()
+	apiPackage = "moj.project.infrastructure.stat.api"
+	modelPackage = "moj.project.infrastructure.stat.model"
+}
+sourceSets {
+	main{
+		java.srcDirs += project.layout.buildDirectory.dir("generated-sources/openapi/src/main/java").get().asFile.path
+
+	}
+}
+compileJava.dependsOn tasks.openApiGenerate
+
+bootJar {
+	archiveFileName = "medical_registration.${archiveExtension.get()}"
+}
+jar {
+	enabled = false
+
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+compileJava.options.encoding = 'UTF-8'
